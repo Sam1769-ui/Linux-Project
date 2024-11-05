@@ -1,0 +1,40 @@
+touch system_health.sh
+chmod +x system_health.sh
+
+nano system_health.sh
+
+#!/bin/bash
+
+# System Health Checker Script
+# This script will check CPU, Memory, Disk Usage and Top Processes
+
+echo "----- System Health Checker -----"
+echo
+
+# Check CPU usage
+echo "CPU Usage:"
+top -bn1 | grep "Cpu(s)" | sed "s/., *\([0-9.]\)%* id.*/\1/" | awk '{print "CPU Usage: " 100 - $1"%"}'
+echo
+
+# Check Memory usage
+echo "Memory Usage:"
+free -h | grep Mem | awk '{print "Used: " $3 " / Total: " $2 " (" $3/$2*100 "%)"}'
+echo
+
+# Check Disk usage
+echo "Disk Usage:"
+df -h | grep '^/dev' | awk '{print $1 " - " $5 " used, " $3 " free of " $2 " total"}'
+echo
+
+# Display Top 5 processes by CPU usage
+echo "Top 5 processes by CPU usage:"
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 6
+echo
+
+# Display System Uptime
+echo "System Uptime:"
+uptime
+
+
+cd /path/to/directory
+./system_health.sh
